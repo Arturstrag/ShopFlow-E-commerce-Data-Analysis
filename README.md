@@ -40,8 +40,45 @@ Projekt obejmował:
 
 ---
 
-## 📁 Struktura projektu
+## Kontekst biznesowy
+Kontekst biznesowy
+ShopFlow Sp. z o.o.- sklep internetowy działający na polskim rynku e-commerce od 2021 roku.
+- ~40 tys.
+zarejestrowanych klientów
+- 2 000
+produktów w katalogu
+- 20 000
+zamówień (12 mies., próbka)
+- 187 zł
+średnia wartość koszyka (AOV)
 
+| Parametr | Wartość |
+|-----------|----------|
+| Branża | E-commerce – moda, dom i wnętrza, elektronika użytkowa, uroda |
+| Rynek | Polska (dostawy krajowe, brak jeszcze ekspansji zagranicznej) |
+| Model biznesowy | B2C, sprzedaż wyłącznie online (własny sklep + integracja z Allegro) |
+| Liczba klientów w bazie | ok. 5 000 aktywnych kont (dane do warsztatu – w rzeczywistości ShopFlow ma ok. 38 000 zarejestrowanych klientów, warsztat pracuje na próbce) |
+| Liczba zamówień | ok. 20 000 (12 miesięcy wstecz, próbka reprezentatywna) |
+| Liczba produktów w katalogu | ok. 2 000 SKU w 8 kategoriach |
+| Średnia wartość koszyka (AOV) | 187 zł |
+| Zespół | 34 osoby: e-commerce, marketing, logistyka, obsługa klienta, 1-osobowy zespół analityczny (do niedawna 0-osobowy) |
+| Siedziba i magazyn | Poznań |
+
+## 🚨 Główne wyzwania biznesowe
+
+ShopFlow zmaga się z kilkoma kluczowymi problemami biznesowymi, które ograniczają dalszy wzrost firmy:
+
+1. Rosnący koszt pozyskania klienta. Koszt pozyskania klienta (CAC) wzrósł o **34% rok do roku**, a dział marketingu nie posiada jednoznacznej informacji, które kanały marketingowe generują najbardziej wartościowych klientów.
+2. Niska retencja klientów
+Według założeń biznesowych jedynie około **22% klientów** składa drugie zamówienie w ciągu 6 miesięcy od pierwszego zakupu.
+3. Problemy z zarządzaniem zapasami. Najpopularniejsze produkty są regularnie niedostępne w magazynie, co prowadzi do utraty części sprzedaży. Jednocześnie część asortymentu zalega przez wiele miesięcy, generując dodatkowe koszty magazynowania.
+4. Brak przejrzystości rentowności
+Firma nie przeprowadziła dotychczas kompleksowej analizy marżowości poszczególnych kategorii produktowych, co utrudnia podejmowanie decyzji cenowych i zakupowych.
+5. Niespójność danych między działami
+Marketing, sprzedaż i logistyka korzystają z różnych raportów i wskaźników, przez co podejmowane decyzje często opierają się na odmiennych interpretacjach danych.
+6. CAC (Customer Acquisition Cost)** – średni koszt pozyskania jednego nowego klienta.
+7. Retencja – odsetek klientów powracających na kolejny zakup.
+   
 ## 📝 Proces analizy
 
 ### 1. Przygotowanie danych
