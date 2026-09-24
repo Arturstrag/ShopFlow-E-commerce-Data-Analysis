@@ -106,6 +106,10 @@ Przeprowadzono kompleksową analizę biznesową danych e-commerce, obejmującą 
 
 ![Przychód wg kategorii](images/Przychód_wg_kategorii.png)
 
+```excel
+=SUMIFS(order_items!$G$2:$G$48646;order_items!$H$2:$H$48646;A7)
+```
+
 ![Przychód wg kategorii – wykres](images/Przychód_wg_kategorii_wykres.png)
 
 **Obserwacja:** Kategoria Elektronika generuje najwyższy przychód: **10 447 785,11 zł**, czyli **38%** przychodu ujętego w zestawieniu. Łączny przychód ośmiu kategorii wynosi **27 738 887,20 zł**. Najniższy wynik ma kategoria Akcesoria: **727 558,10 zł**.
