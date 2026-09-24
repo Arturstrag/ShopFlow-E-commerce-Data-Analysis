@@ -11,15 +11,20 @@ Projekt obejmował:
 - analizę sezonowości,
 - analizę stanów magazynowych.
 
----
+
 
 ## 🗂️ Dane
 
-- **Źródło:** symulowane dane sklepu internetowego ShopFlow
-- **Liczba rekordów:** ok. 85 000
-- **Liczba tabel:** 5
-- **Zakres czasowy:** 24 miesiące
-- **Format:** relacyjna baza danych PostgreSQL
+Dane pochodzą z symulowanego sklepu internetowego ShopFlow i zawierają 5 tabel.  
+Zakres czasowy analizy wynosi 24 miesiące
+
+| Tabela | Liczba rekordów | Zawartość |
+|---|---:|---|
+| `customers` | ~5 000 | Dane klientów: lokalizacja, kanał pozyskania, data rejestracji, udział w programie lojalnościowym |
+| `products` | ~2 000 | Katalog produktowy: kategoria, marka, cena, koszt, data wprowadzenia do oferty |
+| `orders` | ~20 000 | Nagłówki zamówień: klient, data, status, metoda płatności, wartość, kanał marketingowy |
+| `order_items` | ~49 000 | Pozycje zamówień: produkt, ilość, cena w momencie zakupu, rabat |
+| `inventory` | 2 000 | Stany magazynowe: ilość na stanie, próg uzupełnienia, lokalizacja w magazynie |
 
 ### Główne obszary danych:
 - klienci,
@@ -31,10 +36,6 @@ Projekt obejmował:
 ---
 
 ## 🔧 Narzędzia i technologie
-
-- **PostgreSQL** – czyszczenie, transformacja i analiza danych
-- **SQL** – tworzenie zapytań analitycznych
-- **DBeaver** – praca z bazą danych
 - **Microsoft Excel** – analiza i prezentacja wyników
 - **Copilot** – wsparcie przy tworzeniu i optymalizacji zapytań
 
@@ -69,7 +70,7 @@ zamówień (12 mies., próbka)
 ShopFlow zmaga się z kilkoma kluczowymi problemami biznesowymi, które ograniczają dalszy wzrost firmy:
 
 1. Rosnący koszt pozyskania klienta. Koszt pozyskania klienta (CAC) wzrósł o **34% rok do roku**, a dział marketingu nie posiada jednoznacznej informacji, które kanały marketingowe generują najbardziej wartościowych klientów.
-2. Niska retencja klientów
+2. Niska retencja klientów.
 Według założeń biznesowych jedynie około **22% klientów** składa drugie zamówienie w ciągu 6 miesięcy od pierwszego zakupu.
 3. Problemy z zarządzaniem zapasami. Najpopularniejsze produkty są regularnie niedostępne w magazynie, co prowadzi do utraty części sprzedaży. Jednocześnie część asortymentu zalega przez wiele miesięcy, generując dodatkowe koszty magazynowania.
 4. Brak przejrzystości rentowności
@@ -100,24 +101,36 @@ Dzięki temu przygotowano spójny i uporządkowany zbiór danych, który mógł 
 
 
 ### 2. Analiza biznesowa 
-Przeprowadzono kompleksową analizę biznesową danych e-commerce, obejmującą sprzedaż i rentowność kategorii, retencję i aktywację klientów, efektywność kanałów marketingowych, sezonowość sprzedaży, zachowania zakupowe, zwroty, program lojalnościowy oraz zarządzanie zapasami. Analiza pozwoliła zidentyfikować kluczowe obszary wymagające działań biznesowych, m.in. niską marżowość Elektroniki, problem z aktywacją nowych klientów, brak mierzalnego efektu programu lojalnościowego oraz jednoczesne niedobory i nadmiary magazynowe. Analizę biznesową przeprowadzono w **Microsoft Excel** wraz z **Copilotem**. Pełna analiza biznesowa znajduje się w pliku analysis.md. Poniżej przedstawiono odpowiedzi na najważniejsze problemy sklepu ShopFlow: 
+Przeprowadzono kompleksową analizę biznesową danych e-commerce, obejmującą sprzedaż i rentowność kategorii, retencję i aktywację klientów, efektywność kanałów marketingowych, sezonowość sprzedaży, zachowania zakupowe, zwroty, program lojalnościowy oraz zarządzanie zapasami. Analizę biznesową przeprowadzono w **Microsoft Excel**. Pełna analiza biznesowa znajduje się w pliku analysis.md. Poniżej przedstawiono odpowiedzi na niektóre problemy sklepu ShopFlow: 
 
 1. **Które kategorie generują największy przychód?** 
 
-![Przychód wg kategorii](images/Przychód_wg_kategorii.png)
-
-```excel
-=SUMIFS(order_items!$G$2:$G$48646;order_items!$H$2:$H$48646;A7)
+Na podstawie danych z tabeli order_items oraz products przygotowano zestawienie przychodu według kategorii produktów. 
+Obliczono przychód dla każdej pozycji zamówienia w według wzoru:
+```
+przychód = quantity × unit_price_at_order × (1 − discount_pct / 100)
 ```
 
-![Przychód wg kategorii – wykres](images/Przychód_wg_kategorii_wykres.png)
+Kalkulacja uwzględnia  liczbę sprzedanych sztuk, cenę obowiązującą w chwili zamówienia oraz rabat. Przychód zagregowano według kategorii, sumując przychody wszystkich pozycji należących do tej samej kategorii.
+Pominięto kategorię **„Nieznana”**, czyli pozycje, których nie można było przypisać do jednej z właściwych kategorii produktowych. Wyniki przedstawiono w poniższej tabeli. 
+
+![Przychód wg kategorii](images/Przychód_wg_kategorii.png)
 
 **Obserwacja:** Kategoria Elektronika generuje najwyższy przychód: **10 447 785,11 zł**, czyli **38%** przychodu ujętego w zestawieniu. Łączny przychód ośmiu kategorii wynosi **27 738 887,20 zł**. Najniższy wynik ma kategoria Akcesoria: **727 558,10 zł**.
 
-**Rekomendacja:**  Należy priorytetyzować Elektronikę w budżecie marketingowym i 
+**Rekomendacja biznesowa:**  Należy priorytetyzować Elektronikę w budżecie marketingowym i 
 eksponować ją na stronie głównej sklepu. Należy też monitorować to razem z marżą, a nie tylko z samym przychodem.
 
-2. **Które kategorie mają najwyższą marżę procentową, a które  najniższą?**
+1. **Które kategorie mają najwyższą marżę procentową, a które  najniższą?**
+
+Średnia marża procentowa według kategorii mówi, jaka część ceny sprzedaży produktu pozostaje po pokryciu jego kosztu zakupu lub wytworzenia. 
+
+Na podstawie danych z arkusza products przygotowano zestawienie średniej marży procentowej według kategorii produktów.
+Marżę obliczono według wzoru: 
+```
+marża procentowa = (unit_price − unit_cost) / unit_price × 100%
+```
+W obliczeniach pominięto produkty z ceną równą 0. Następnie obliczono średnią marżę dla każdej kategorii z pominięciem kategorii "Nieznana". 
 
 ![Marża procentowa według kategorii](images/Marża_procentowa_wg_kategorii.png)
 
@@ -132,12 +145,33 @@ zakupie elektroniki (cross-sell), co podniosłoby łączną marżę koszyka bez 
 wolumenu głównej kategorii. 
 
 3. **Które produkty mają wysoką sprzedaż, ale niską marżę?**
+
+Na podstawie danych z arkuszy order_items oraz products przygotowano ranking 10 produktów o najniższej rzeczywistej marży po rabatach. Połączono dane z arkuszy order_items i products według pola product_id. Następnie dla każdego produktu zagregowano:
+- sprzedaną liczbę sztuk,
+- przychód po rabatach,
+- koszt sprzedanych sztuk.
+Przychód po rabatach policzono jako:
+```
+quantity × unit_price_at_order × (1 − discount_pct / 100)
+```
+Koszt sprzedanych sztuk:
+```
+quantity × unit_cost
+```
+Zrealizowaną marżę procentową obliczono według wzoru:
+```
+(unit_price_at_order * (1 - discount_pct/100))
+```
+W obliczniach uwzględniono wyłącznie produkty sprzedane w ilości większej niż 20 sztuk oraz z dodatnim przychodem, aby uniknąć dzielenia przez zero.
+
     
 ![Produkty o niskiej marży procentowej](images/Niska_marża_procentowa.png)
 
+
+
 **Obserwacja:** Wszystkie 10 produktów o wysokiej sprzedaży i niskiej marży to 
 Elektronika - potwierdza to i pogłębia wniosek z **Pytania 2** na poziomie konkretnych 
-SKU. Co ważniejsze: ich realna marża **(13,7–16,6%)** jest wyraźnie niższa niż średnia katalogowa marża Elektroniki **(35,4%, patrz Pytanie 2)** - te konkretne produkty są 
+SKU. Co ważniejsze: ich realna marża **(13,7–16,6%)** jest wyraźnie niższa niż średnia katalogowa marża Elektroniki **(35,4%)** - te konkretne produkty są 
 sprzedawane z rabatami, które dodatkowo zjadają i tak już najniższą marżę wśród wszystkich kategorii produktowych. 
 
 **Rekomendacja:** Zacząć renegocjację cen zakupu od tych konkretnych, 
@@ -145,6 +179,23 @@ zidentyfikowanych 10 produktów - to najszybszy sposób na poprawę marży bez r
 nie powinny na nie obowiązywać, skoro już wyjściowo mają niską marżę katalogową.
 
 4. **Jacy klienci wracają najczęściej (drugi zakup)?**  
+
+Na podstawie danych z arkuszy orders oraz customers przygotowano analizę drugiego zakupu i retencji 90-dniowej.
+Pominięto zamówienia ze statusem Cancelled, ponieważ anulowane zamówienie nie jest traktowane jako zrealizowany zakup.Dla każdego customer_id:
+- uporządkowano ważne zamówienia chronologicznie,
+- ustalono datę pierwszego zakupu,
+- ustalono datę drugiego zakupu.
+
+liczbę dni między pierwszym i drugim zakupem obliczono:
+```
+dni do drugiego zakupu = data drugiego zakupu − data pierwszego zakupu
+```
+Klient otrzymał wartość 1, jeżeli drugi zakup nastąpił maksymalnie w ciągu 90 dni, w przeciwnym przypadku 0. 
+Retencję 90-dniową obliczono jako:
+```
+liczba klientów z drugim zakupem ≤ 90 dni / liczba klientów z pierwszym zakupem × 100%
+```
+Następnie połączono klientów z arkuszem customers według customer_id, aby przypisać im marketing_channel.
    
 ![Retencja klientów – wariant 1](images/retencja_klientów_1.png)
 
@@ -166,6 +217,29 @@ marketing, czy baza **61 000** subskrybentów jest odpowiednio segmentowana.
 5. **Jakie produkty są zagrożone brakiem w magazynie w najbliższym 
 miesiącu?** 
 
+Dane z tabel inventory i products według połączono pola product_id.
+Z arkusza products pobrano:
+nazwę i kategorię produktu,
+status is_active.
+Z arkusza inventory wykorzystano:
+stock_quantity — bieżący stan,
+reorder_level — poziom ponownego zamówienia,
+lokalizację magazynową.
+Produkty wybrano spełniające równocześnie dwa warunki:
+```
+is_active = TRUE
+```
+```
+stock_quantity ≤ reorder_level
+```
+Dla każdego wybranego produktu obliczono 
+```
+niedobór = reorder_level − stock_quantity
+```
+
+W poniższej tabeli przedstawiono 15 pozycji z najniśzym stanem magazynowym 
+
+
 ![Najniższy stan magazynowy](images/Najniższy_stan_magazynowy.png)
 
 **Wynik:** **434** aktywne produkty (ok. **22%** całego katalogu) mają stan magazynowy 
@@ -182,6 +256,18 @@ Zacząć od produktów z zerowym stanem i wysoką historyczną sprzedażą.
 
 6. **Który kanał marketingowy generuje klientów o najwyższym LTV?** 
 
+Tabele customers i orders według pola customer_id. Każdemu zamówieniu przypisano marketing_channel klienta z arkusza customers.
+Dla każdego kanału obliczono:
+sumę total_amount,
+- liczbę unikalnych klientów, którzy złożyli co najmniej jedno zamówienie.
+- LTV na klienta policzono jako:
+```
+LTV = suma total_amount w kanale / liczba unikalnych kupujących w kanale
+```
+Klienci bez zamówień nie zostali ujęci w obliczeniach. Wyniki przedstawiono w tabeli. 
+
+**LTV (Customer Lifetime Value)** mówi, jaką łączną wartość zakupów wygenerował przeciętny klient w całym dostępnym okresie.
+
 ![LTV](images/LTV.png)
 
 **Obserwacja:** Różnice są zaskakująco małe **(6 496-6 990 zł, rozstęp ~7%)** - żaden 
@@ -194,6 +280,10 @@ alokacji budżetu oprzeć na koszcie pozyskania klienta (CAC) per kanał, a nie 
 przeoczenie). 
 
 7.  **Ilu klientów robi zakupy tylko raz i nigdy nie wraca?** 
+
+Tabelę customers połączono po customer_id z tabelą orders. W analizie 
+pominięto zamówienia ze statusem Cancelled, ponieważ anulowane zamówienia nie są traktowane jako zakupy.
+Dla każdego klienta policzono liczbę pozostałych zamówień, a następnie przypisano ich do trzech grup: brak zrealizowanych zamówień, dokładnie jedno zamówienie, co najmniej dwa zamówienia.
 
 ![Klienci z jednym zakupem](images/klienci_z_jednym_zakupem.png)
 
@@ -211,6 +301,16 @@ danych") - pokazuje, że dane prowadzą do innego wniosku niż intuicja.
 
 8. **Czy członkowie programu lojalnościowego kupują częściej i 
 więcej?**
+
+Klientów podzielono na dwie grupy:
+loyalty_member = **TRUE** — członkowie programu,
+loyalty_member = **FALSE** — pozostali klienci.
+Dla każdej grupy obliczono:
+- liczbę klientów i zamówień,
+- średnią liczbę zamówień na klienta,
+- średnią wartość koszyka,
+- średni łączny przychód na klienta.
+
 
 ![Lojalność klientów](images/Lojalność_klientów.png)
 
