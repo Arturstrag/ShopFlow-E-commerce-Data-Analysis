@@ -1,381 +1,535 @@
 # ShopFlow – E-commerce Data Analysis
 
-## 🎯 Cel projektu
+## 🎯 Project Objective
 
-Celem projektu była analiza danych sprzedażowych sklepu internetowego **ShopFlow** oraz przygotowanie danych do wiarygodnej analizy biznesowej.
+The objective of this project was to analyze sales data from the **ShopFlow** online store and prepare the data for reliable business analysis.
 
-Projekt obejmował:
-- identyfikację i naprawę problemów jakości danych,
-- analizę sprzedaży,
-- analizę klientów i produktów,
-- analizę sezonowości,
-- analizę stanów magazynowych.
+The project included:
 
+- identifying and resolving data quality issues;
+- sales analysis;
+- customer and product analysis;
+- seasonality analysis;
+- inventory analysis.
 
+## 🗂️ Data
 
-## 🗂️ Dane
+The data comes from a simulated ShopFlow online store and contains five tables. The analysis covers a period of 24 months.
 
-Dane pochodzą z symulowanego sklepu internetowego ShopFlow i zawierają 5 tabel.  
-Zakres czasowy analizy wynosi 24 miesiące
-
-| Tabela | Liczba rekordów | Zawartość |
+| Table | Number of records | Contents |
 |---|---:|---|
-| `customers` | ~5 000 | Dane klientów: lokalizacja, kanał pozyskania, data rejestracji, udział w programie lojalnościowym |
-| `products` | ~2 000 | Katalog produktowy: kategoria, marka, cena, koszt, data wprowadzenia do oferty |
-| `orders` | ~20 000 | Nagłówki zamówień: klient, data, status, metoda płatności, wartość, kanał marketingowy |
-| `order_items` | ~49 000 | Pozycje zamówień: produkt, ilość, cena w momencie zakupu, rabat |
-| `inventory` | 2 000 | Stany magazynowe: ilość na stanie, próg uzupełnienia, lokalizacja w magazynie |
+| `customers` | ~5,000 | Customer data: location, acquisition channel, registration date and loyalty program membership |
+| `products` | ~2,000 | Product catalog: category, brand, price, cost and product launch date |
+| `orders` | ~20,000 | Order headers: customer, date, status, payment method, value and marketing channel |
+| `order_items` | ~49,000 | Order line items: product, quantity, price at the time of purchase and discount |
+| `inventory` | 2,000 | Inventory levels: stock quantity, reorder threshold and warehouse location |
 
-### Główne obszary danych:
-- klienci,
-- produkty,
-- zamówienia,
-- pozycje zamówień,
-- stany magazynowe.
+### Main data areas
 
----
-
-## 🔧 Narzędzia i technologie
-- **Microsoft Excel** – analiza i prezentacja wyników
-- **Copilot** – wsparcie przy tworzeniu i optymalizacji zapytań
+- customers;
+- products;
+- orders;
+- order items;
+- inventory levels.
 
 ---
 
-## Kontekst biznesowy
-Kontekst biznesowy
-ShopFlow Sp. z o.o.- sklep internetowy działający na polskim rynku e-commerce od 2021 roku.
-- ~40 tys.
-zarejestrowanych klientów
-- 2 000
-produktów w katalogu
-- 20 000
-zamówień (12 mies., próbka)
-- 187 zł
-średnia wartość koszyka (AOV)
+## 🔧 Tools and Technologies
 
-| Parametr | Wartość |
-|-----------|----------|
-| Branża | E-commerce – moda, dom i wnętrza, elektronika użytkowa, uroda |
-| Rynek | Polska (dostawy krajowe, brak jeszcze ekspansji zagranicznej) |
-| Model biznesowy | B2C, sprzedaż wyłącznie online (własny sklep + integracja z Allegro) |
-| Liczba klientów w bazie | ok. 5 000 aktywnych kont (dane do warsztatu – w rzeczywistości ShopFlow ma ok. 38 000 zarejestrowanych klientów, warsztat pracuje na próbce) |
-| Liczba zamówień | ok. 20 000 (12 miesięcy wstecz, próbka reprezentatywna) |
-| Liczba produktów w katalogu | ok. 2 000 SKU w 8 kategoriach |
-| Średnia wartość koszyka (AOV) | 187 zł |
-| Zespół | 34 osoby: e-commerce, marketing, logistyka, obsługa klienta, 1-osobowy zespół analityczny (do niedawna 0-osobowy) |
-| Siedziba i magazyn | Poznań |
+- **Microsoft Excel** – data analysis and presentation of results;
+- **Copilot** – support in creating and optimizing queries.
 
-## 🚨 Główne wyzwania biznesowe
+---
 
-ShopFlow zmaga się z kilkoma kluczowymi problemami biznesowymi, które ograniczają dalszy wzrost firmy:
+## Business Context
 
-1. Rosnący koszt pozyskania klienta. Koszt pozyskania klienta (CAC) wzrósł o **34% rok do roku**, a dział marketingu nie posiada jednoznacznej informacji, które kanały marketingowe generują najbardziej wartościowych klientów.
-2. Niska retencja klientów.
-Według założeń biznesowych jedynie około **22% klientów** składa drugie zamówienie w ciągu 6 miesięcy od pierwszego zakupu.
-3. Problemy z zarządzaniem zapasami. Najpopularniejsze produkty są regularnie niedostępne w magazynie, co prowadzi do utraty części sprzedaży. Jednocześnie część asortymentu zalega przez wiele miesięcy, generując dodatkowe koszty magazynowania.
-4. Brak przejrzystości rentowności
-Firma nie przeprowadziła dotychczas kompleksowej analizy marżowości poszczególnych kategorii produktowych, co utrudnia podejmowanie decyzji cenowych i zakupowych.
-5. Niespójność danych między działami
-Marketing, sprzedaż i logistyka korzystają z różnych raportów i wskaźników, przez co podejmowane decyzje często opierają się na odmiennych interpretacjach danych.
-6. CAC (Customer Acquisition Cost)** – średni koszt pozyskania jednego nowego klienta.
-7. Retencja – odsetek klientów powracających na kolejny zakup.
-   
-## 📝 Proces analizy
+ShopFlow Sp. z o.o. is an online store operating in the Polish e-commerce market since 2021.
 
-### 1. Przygotowanie danych
+| Parameter | Value |
+|---|---|
+| Industry | E-commerce – fashion, home and interiors, consumer electronics and beauty |
+| Market | Poland, domestic deliveries, no international expansion yet |
+| Business model | B2C, online-only sales through the company’s own store and an Allegro integration |
+| Customers in the database | Approximately 5,000 active accounts in the workshop dataset; in reality, ShopFlow has approximately 38,000 registered customers |
+| Number of orders | Approximately 20,000 orders from the previous 12 months |
+| Product catalog | Approximately 2,000 SKUs across 8 categories |
+| Average order value (AOV) | PLN 187 |
+| Team | 34 employees covering e-commerce, marketing, logistics and customer service, with a one-person analytics team |
+| Headquarters and warehouse | Poznań |
 
-Przed rozpoczęciem właściwej analizy przeprowadzono kompleksową kontrolę jakości danych we wszystkich tabelach. Proces obejmował identyfikację oraz obsługę problemów, które mogły wpływać na wiarygodność wyników analizy.
+## 🚨 Main Business Challenges
 
-W ramach przygotowania danych:
+ShopFlow faces several key business challenges that limit further growth:
 
-* usunięto i scalono duplikaty przy zachowaniu powiązanej historii danych,
-* obsłużono braki danych oraz wartości wymagające dodatkowej weryfikacji,
-* ujednolicono formaty dat, numerów telefonów, adresów e-mail oraz danych tekstowych,
-* poprawiono literówki i niespójne nazwy kategorii oraz lokalizacji,
-* zidentyfikowano błędne i nietypowe wartości,
-* wykryto wartości odstające z wykorzystaniem metody IQR,
-* naprawiono wybrane problemy z integralnością danych pomiędzy tabelami,
-* zachowano historyczne rekordy w przypadkach, w których ich usunięcie mogłoby prowadzić do utraty istotnych informacji.
+1. **Increasing customer acquisition costs.** Customer acquisition cost (CAC) increased by **34% year over year**, while the marketing team lacks a clear view of which channels generate the most valuable customers.
+2. **Low customer retention.** According to the original business assumptions, only approximately **22% of customers** place a second order within six months of their first purchase.
+3. **Inventory management issues.** The most popular products are frequently out of stock, leading to lost sales. At the same time, some products remain in inventory for many months and generate additional storage costs.
+4. **Limited visibility into profitability.** The company had not previously carried out a comprehensive analysis of profitability by product category, making pricing and purchasing decisions more difficult.
+5. **Inconsistent data across departments.** Marketing, sales and logistics use different reports and metrics, so decisions are often based on different interpretations of the data.
+6. **CAC — Customer Acquisition Cost** – the average cost of acquiring one new customer.
+7. **Retention** – the percentage of customers who return to make another purchase.
 
-Dzięki temu przygotowano spójny i uporządkowany zbiór danych, który mógł zostać wykorzystany w dalszej analizie. Proces oczyszczania danych został przeprowadzony za pomocą **PostgreSQL** i **SQL** i znajduje się w osobnym projekcie https://github.com/Arturstrag/ShopFlow-E-commerce-Data-Cleaning-Project
+## 📝 Analysis Process
 
+### 1. Data Preparation
 
-### 2. Analiza biznesowa 
-ShopFlow to sklep internetowy działający w kilku kategoriach produktowych. Zarząd firmy chciał lepiej zrozumieć, co naprawdę wpływa na wyniki biznesowe: które kategorie generują przychód, gdzie powstaje marża, dlaczego klienci wracają lub nie wracają oraz czy zapasy są zarządzane w odpowiedni sposób.
+Before the business analysis began, a comprehensive data quality review was carried out across all tables. The process focused on identifying and handling issues that could affect the reliability of the results.
 
-Celem analizy nie było wyłącznie przygotowanie zestawień i wykresów. Najważniejsze było znalezienie odpowiedzi na pytanie, które problemy rzeczywiście wymagają interwencji biznesowej. Dlatego każdą analizę rozpoczęto od konkretnego pytania, następnie zdefiniowano sposób obliczeń, zweryfikowano wynik i oddzielono obserwację od rekomendacji.
+The data preparation process included:
 
-Analizę przeprowadzono na podstawie danych z tabel customers, products, orders, order_items oraz inventory. W zależności od pytania dane łączono po odpowiednich kluczach, takich jak customer_id i product_id. W obliczeniach uwzględniano również jakość danych i znaczenie poszczególnych statusów zamówień. Na przykład zamówienia anulowane nie były traktowane jako zrealizowane zakupy.
+- removing and merging duplicate records while preserving related history;
+- handling missing data and values requiring additional verification;
+- standardizing date, phone number, email address and text formats;
+- correcting spelling mistakes and inconsistent category and location names;
+- identifying invalid and unusual values;
+- detecting outliers using the IQR method;
+- fixing selected data integrity issues between tables;
+- preserving historical records where removing them could result in the loss of important information.
 
-1. **Które kategorie generują największy przychód?** 
+As a result, a consistent and structured dataset was prepared for further analysis.
 
-Pierwszym krokiem było ustalenie, które kategorie produktów są najważniejszym źródłem przychodu. Odpowiedź na to pytanie miała pomóc w ocenie, gdzie sklep powinien kierować działania marketingowe i sprzedażowe.
+The data-cleaning process was performed using **PostgreSQL** and **SQL** and is available in a separate project:
 
-Na podstawie danych z tabel order_items oraz products obliczono przychód dla każdej pozycji zamówienia. W kalkulacji uwzględniono liczbę sprzedanych sztuk, cenę obowiązującą w chwili zamówienia oraz rabat udzielony klientowi.
+[ShopFlow E-commerce Data Cleaning Project](https://github.com/Arturstrag/ShopFlow-E-commerce-Data-Cleaning-Project)
 
-Przychód dla pojedynczej pozycji obliczono według wzoru:
-```
-przychód = quantity × unit_price_at_order × (1 − discount_pct / 100)
-```
-Następnie pozycje zamówień połączono z katalogiem produktów za pomocą pola product_id. Dzięki temu każda pozycja otrzymała informację o swojej kategorii. Przychody zsumowano według kategorii produktów. Z zestawienia wykluczono kategorię **„Nieznana”**, ponieważ obejmowała pozycje, których nie można było wiarygodnie przypisać do właściwej kategorii.
+### 2. Business Analysis
 
+ShopFlow operates across several product categories. The management team wanted to better understand what actually drives business performance: which categories generate revenue, where margin is created, why customers return or fail to return, and whether inventory is being managed effectively.
 
-![Przychód wg kategorii](images/Przychód_wg_kategorii.png)
+The goal was not simply to prepare tables and charts. The most important objective was to identify which problems genuinely required business intervention.
 
-Wyniki pokazały bardzo wyraźną koncentrację przychodu. Kategoria **Elektronika** wygenerowała **10 447 785,11 zł**, czyli około **38%** całego przychodu ujętego w zestawieniu. Łączny przychód ośmiu analizowanych kategorii wyniósł **27 738 887,20 zł**.
+Each analysis therefore followed the same structure:
 
-Na drugim końcu znalazły się **Akcesoria**, których przychód wyniósł **727 558,10 zł**. Różnica między Elektroniką a Akcesoriami jest znacząca, dlatego na pierwszy rzut oka naturalnym wnioskiem mogłoby być dalsze zwiększanie udziału Elektroniki w sprzedaży.
+1. define a specific business question;
+2. establish the calculation method;
+3. verify the result;
+4. distinguish observations from recommendations.
 
-**Obserwacja**: Elektronika jest najważniejszym źródłem przychodu ShopFlow i odpowiada za większą część sprzedaży niż pozostałe kategorie. Jednocześnie sam przychód nie mówi jeszcze, czy sprzedaż tej kategorii jest najbardziej opłacalna.
+The analysis used data from the `customers`, `products`, `orders`, `order_items` and `inventory` tables. Depending on the question, the data was joined using keys such as `customer_id` and `product_id`.
 
-**Rekomendacja biznesowa**: Elektronikę warto priorytetyzować w budżecie marketingowym i eksponować na stronie głównej sklepu. Decyzji nie należy jednak podejmować wyłącznie na podstawie przychodu. Wynik powinien być analizowany razem z marżą, rabatami i zwrotami, ponieważ wysoka sprzedaż może wiązać się z niższą rentownością.
+Order statuses and data quality were also taken into account. For example, cancelled orders were not treated as completed purchases.
 
-2. **Które kategorie mają najwyższą marżę procentową, a które  najniższą?**
+### 1. Which product categories generate the most revenue?
 
-Wysoki przychód nie musi oznaczać wysokiego zysku. Dlatego kolejne pytanie dotyczyło marżowości poszczególnych kategorii.
+The first step was to identify which product categories are the most important sources of revenue. This question was intended to help determine where the store should focus its marketing and sales activities.
 
-Średnia marża procentowa pokazuje, jaka część ceny sprzedaży pozostaje po pokryciu kosztu zakupu lub wytworzenia produktu. Marżę dla pojedynczego produktu obliczono na podstawie danych z tabeli products.
+Revenue was calculated for each order line using data from the `order_items` and `products` tables. The calculation included the number of units sold, the price at the time of purchase and the discount applied to the customer.
 
-```
-marża procentowa = (unit_price − unit_cost) / unit_price × 100%
-```
-W obliczeniach pominięto produkty z ceną równą 0. Następnie obliczono średnią marżę dla każdej kategorii z pominięciem kategorii **"Nieznana"**. 
+Revenue for an individual order line was calculated as follows:
 
-![Marża procentowa według kategorii](images/Marża_procentowa_wg_kategorii.png)
-
-Elektronika osiągnęła średnią marżę na poziomie **35,4%**, podczas gdy najwyższą marżę odnotowano w kategorii Akcesoria — **56,1%**. Oznacza to, że Elektronika i Akcesoria reprezentują dwa różne modele biznesowe.
-
-**Obserwacja**: Elektronika jest kategorią o najwyższym przychodzie, ale jednocześnie ma najniższą marżę spośród wszystkich kategorii. Jej marża jest o ponad 10 punktów procentowych niższa od średniej dla analizowanych kategorii. Akcesoria mają odwrotny profil: niski przychód i najwyższą marżę.
-To oznacza, że sama decyzja o zwiększeniu sprzedaży Elektroniki mogłaby poprawić przychód, ale niekoniecznie poprawiłaby rentowność całego sklepu.
-
-**Rekomendacja biznesowa**: Dla zarządu warto przygotować wspólną analizę przychodu i marży według kategorii. Elektronika i Akcesoria powinny być traktowane jako dwa uzupełniające się obszary. Elektronikę można wykorzystać do generowania ruchu i wysokiego wolumenu, natomiast Akcesoria mogą zwiększać marżę całego koszyka. Dobrym kierunkiem byłoby testowanie sprzedaży dodatkowej, na przykład proponowanie akcesoriów klientom kupującym elektronikę. Taka strategia mogłaby podnieść łączną marżę koszyka bez konieczności ograniczania sprzedaży głównej kategorii.
-
-3. **Które produkty mają wysoką sprzedaż, ale niską marżę?**
-
-Analiza kategorii pokazała, że Elektronika jest najbardziej problematyczna pod względem relacji przychodu do marży. Kolejnym krokiem było sprawdzenie, czy problem dotyczy całej kategorii, czy tylko wybranych produktów.
-
-W tym celu przygotowano ranking 10 produktów o najniższej rzeczywistej marży spośród produktów sprzedanych w ilości większej niż 20 sztuk. Połączono dane z tabel order_items i products za pomocą pola product_id.
-
-Dla każdego produktu zagregowano:
-
-- liczbę sprzedanych sztuk;
-- przychód po uwzględnieniu rabatów;
-- koszt sprzedanych sztuk;
-- zrealizowaną marżę procentową.
-
-Przychód po rabatach obliczono według wzoru:
-
-```
+```text
+revenue =
 quantity × unit_price_at_order × (1 − discount_pct / 100)
 ```
-Koszt sprzedanych sztuk obliczono jako:
+
+The order items were then joined with the product catalog using `product_id`. This allowed each order line to be assigned to a product category.
+
+Revenue was aggregated by category. The **“Unknown”** category was excluded because its items could not be reliably assigned to a valid category.
+
+![Revenue by category](images/Przychód_wg_kategorii.png)
+
+The results showed a clear concentration of revenue. **Electronics** generated **PLN 10,447,785.11**, representing approximately **38%** of the revenue included in the analysis.
+
+The combined revenue of the eight analyzed categories amounted to **PLN 27,738,887.20**.
+
+At the other end of the scale were **Accessories**, with revenue of **PLN 727,558.10**.
+
+**Observation:** Electronics is ShopFlow’s most important revenue-generating category and accounts for more sales than the other categories. However, revenue alone does not indicate whether this category is the most profitable.
+
+**Business recommendation:** Electronics should be prioritized in the marketing budget and featured prominently on the store’s homepage. Decisions should not be based on revenue alone. The result should also be analyzed together with margin, discounts and returns, because high sales may be associated with lower profitability.
+
+### 2. Which categories have the highest and lowest percentage margins?
+
+High revenue does not necessarily mean high profit. Therefore, the next question focused on the profitability of individual product categories.
+
+Percentage margin shows what share of the selling price remains after covering the purchase or production cost of a product.
+
+The margin for each product was calculated using the following formula:
+
+```text
+percentage margin =
+(unit_price − unit_cost) / unit_price × 100%
 ```
-quantity × unit_cost
+
+Products with a price equal to zero were excluded. The average margin was then calculated for each category, excluding the **“Unknown”** category.
+
+![Percentage margin by category](images/Marża_procentowa_wg_kategorii.png)
+
+Electronics achieved an average margin of **35.4%**, while the highest margin was recorded for Accessories at **56.1%**.
+
+This means that Electronics and Accessories represent two very different business profiles.
+
+**Observation:** Electronics is the category with the highest revenue but also the lowest margin. Its margin is more than 10 percentage points below the average for the analyzed categories. Accessories have the opposite profile: low revenue but the highest margin.
+
+This means that increasing Electronics sales could improve revenue without necessarily improving the overall profitability of the store.
+
+**Business recommendation:** Management should receive a combined revenue and margin analysis by category. Electronics and Accessories should be treated as complementary areas.
+
+Electronics can generate traffic and sales volume, while Accessories can increase the margin of the entire basket. A good direction would be to test cross-selling, for example by recommending accessories to customers purchasing electronics.
+
+This strategy could increase the total basket margin without reducing the sales volume of the main category.
+
+### 3. Which products have high sales but low margins?
+
+The category analysis showed that Electronics is the most problematic category in terms of the relationship between revenue and margin. The next step was to determine whether this issue affected the entire category or only selected products.
+
+A ranking of the 10 products with the lowest realized margins was prepared. Only products sold in quantities greater than 20 units were included.
+
+The `order_items` and `products` tables were joined using `product_id`.
+
+For each product, the following metrics were aggregated:
+
+- number of units sold;
+- revenue after discounts;
+- cost of goods sold;
+- realized percentage margin.
+
+Revenue after discounts was calculated as:
+
+```text
+revenue after discount =
+quantity × unit_price_at_order × (1 − discount_pct / 100)
 ```
-Zrealizowaną marżę procentową obliczono na podstawie rzeczywistej ceny zapłaconej przez klienta:
+
+The cost of goods sold was calculated as:
+
+```text
+cost of goods sold = quantity × unit_cost
 ```
-(unit_price_at_order * (1 - discount_pct/100))
+
+The realized percentage margin was calculated using the actual price paid by the customer:
+
+```text
+realized margin =
+(revenue after discount − cost of goods sold)
+/
+revenue after discount
+× 100%
 ```
-W analizie uwzględniono wyłącznie produkty sprzedane w ilości większej niż 20 sztuk oraz produkty z dodatnim przychodem. Dzięki temu ranking nie został zdominowany przez produkty sprzedane pojedynczo lub produkty z niepełnymi danymi.
 
-    
-![Produkty o niskiej marży procentowej](images/Niska_marża_procentowa.png)
+Only products sold in quantities greater than 20 units and products with positive revenue were included. This prevented the ranking from being dominated by products sold only once or by products with incomplete data.
 
+![Products with low percentage margins](images/Niska_marża_procentowa.png)
 
-Wyniki potwierdziły, że problem nie dotyczy wyłącznie średniej kategorii. Wszystkie 10 produktów o wysokiej sprzedaży i najniższej zrealizowanej marży należało do kategorii Elektronika.
+The results confirmed that the issue was not limited to the category average. All 10 products with high sales and the lowest realized margins belonged to Electronics.
 
-Ich rzeczywista marża wynosiła od **13,7%** do **16,6%**, czyli znacznie mniej niż średnia katalogowa marża Elektroniki wynosząca **35,4%**. Różnica wynika przede wszystkim z rabatów, które obniżają cenę faktycznie płaconą przez klientów.
+Their realized margins ranged from **13.7% to 16.6%**, significantly below the catalog margin for Electronics of **35.4%**.
 
-**Obserwacja**: Produkty o wysokiej sprzedaży i niskiej marży koncentrują się w Elektronice. Rabaty dodatkowo obniżają ich rzeczywistą marżę, przez co najbardziej popularne produkty niekoniecznie są najbardziej opłacalne.
+The difference was primarily caused by discounts, which reduced the actual price paid by customers.
 
-**Rekomendacja biznesowa**: Pierwszym krokiem powinno być przeanalizowanie tych 10 konkretnych produktów, zamiast zmiany strategii dla całej kategorii. Warto rozpocząć renegocjację cen zakupu właśnie od tych SKU, ponieważ poprawa warunków dostaw mogłaby zwiększyć marżę bez ryzyka utraty całego wolumenu sprzedaży.
-Równolegle należy sprawdzić, czy produkty te nie są zbyt często obejmowane promocjami. Jeśli mają niską marżę katalogową, rutynowe rabatowanie może dodatkowo pogarszać ich rentowność.
+**Observation:** Products with high sales and low margins are concentrated in Electronics. Discounts further reduce their realized margins, meaning that the most popular products are not necessarily the most profitable.
 
-4. **Jacy klienci wracają najczęściej (drugi zakup)?**  
+**Business recommendation:** The first step should be to analyze these 10 specific products rather than changing the strategy for the entire category.
 
-Po analizie przychodu i marży kolejnym obszarem była baza klientów. Zarząd zakładał, że głównym problemem ShopFlow jest niska retencja. Aby zweryfikować to założenie, przeanalizowano, ilu klientów dokonuje drugiego zakupu w ciągu 90 dni.
+Purchase prices should be renegotiated for these particular SKUs, because improving supplier terms could increase margin without putting the overall sales volume of the category at risk.
 
-W analizie wykorzystano dane z tabel orders oraz customers. Zamówienia ze statusem Cancelled zostały pominięte, ponieważ anulowane zamówienie nie jest traktowane jako zrealizowany zakup.
+At the same time, the discount policy for these products should be reviewed. If they already have low catalog margins, routinely applying additional discounts may further weaken their profitability.
 
-Dla każdego klienta:
-- uporządkowano zrealizowane zamówienia chronologicznie;
-- ustalono datę pierwszego zakupu;
-- ustalono datę drugiego zakupu;
-- obliczono liczbę dni między pierwszym i drugim zakupem.
+### 4. Which customers return most often?
 
-Liczbę dni między pierwszym i drugim zakupem obliczono:
+After analyzing revenue and margin, the next area of focus was the customer base.
+
+Management assumed that ShopFlow’s main problem was low customer retention. To verify this assumption, the analysis examined how many customers made a second purchase within 90 days.
+
+The analysis used data from the `orders` and `customers` tables. Orders with the `Cancelled` status were excluded because a cancelled order is not treated as a completed purchase.
+
+For each customer:
+
+- completed orders were sorted chronologically;
+- the date of the first purchase was identified;
+- the date of the second purchase was identified;
+- the number of days between the first and second purchases was calculated.
+
+The number of days between purchases was calculated as:
+
+```text
+days to second purchase =
+second purchase date − first purchase date
 ```
-dni do drugiego zakupu = data drugiego zakupu − data pierwszego zakupu
+
+A customer received a value of 1 if the second purchase took place within 90 days. Otherwise, the customer received a value of 0.
+
+The 90-day retention rate was calculated using the following formula:
+
+```text
+90-day retention =
+number of customers with a second purchase within 90 days
+/
+number of customers with a first purchase
+× 100%
 ```
-Klient otrzymywał wartość 1, jeśli drugi zakup nastąpił w ciągu maksymalnie 90 dni. W przeciwnym przypadku otrzymywał wartość 0.
 
-Wskaźnik retencji 90-dniowej obliczono według wzoru:
-```
-liczba klientów z drugim zakupem ≤ 90 dni / liczba klientów z pierwszym zakupem × 100%
-```
-Następnie klientów połączono z tabelą customers, aby przeanalizować wyniki w podziale na kanał pozyskania.
-   
-![Retencja klientów – wariant 1](images/retencja_klientów_1.png)
+Customers were then joined with the `customers` table to analyze the results by acquisition channel.
 
-Ogółem **44,0%** klientów, którzy zrealizowali co najmniej jeden zakup, dokonało drugiego zakupu w ciągu 90 dni. Wynik ten był dwukrotnie wyższy od celu zakładanego przez zarząd, który wynosił **22%**.
+![Customer retention – variant 1](images/retencja_klientów_1.png)
 
-Różnice pomiędzy kanałami były umiarkowane. Najwyższą retencję odnotowano dla klientów pozyskanych przez Meta Ads i Influencer, a najniższą dla klientów z kanału Newsletter. Rozstęp pomiędzy kanałami wynosił około 4 punkty procentowe.
+Overall, **44.0% of customers** who completed at least one purchase made a second purchase within 90 days.
 
-**Obserwacja**: Dane nie potwierdziły założenia, że głównym problemem ShopFlow jest brak powrotów klientów. Wśród osób, które dokonały pierwszego zakupu, retencja 90-dniowa wynosiła **44%**, czyli znacznie więcej niż zakładany cel.
-Kanał pozyskania miał pewien wpływ na prawdopodobieństwo powrotu, ale różnice nie były na tyle duże, aby wskazać jeden kanał jako całkowicie skuteczny lub nieskuteczny. Znacznie ważniejszym problemem okazało się to, że część zarejestrowanych klientów w ogóle nie dokonała pierwszego zakupu.
+This result was twice as high as the management target of **22%**.
 
-**Rekomendacja biznesowa**: Cel biznesowy powinien zostać przeformułowany. Zamiast koncentrować się wyłącznie na zwiększaniu retencji z **22%** do **30%**, zarząd powinien mierzyć również aktywację, czyli odsetek zarejestrowanych klientów, którzy wykonali pierwszy zakup. Ponieważ Newsletter miał najniższą retencję i nie wyróżniał się wysokim LTV, warto dodatkowo sprawdzić, czy baza około **61 000** subskrybentów jest odpowiednio segmentowana. Warto porównać wyniki kampanii według typu klienta, historii interakcji oraz czasu od rejestracji.
+Differences between acquisition channels were moderate. The highest retention was observed among customers acquired through Meta Ads and Influencer channels, while the lowest retention was recorded for the Newsletter channel. The difference between channels was approximately 4 percentage points.
 
-5. **Jakie produkty są zagrożone brakiem w magazynie w najbliższym 
-miesiącu?** 
+**Observation:** The data did not confirm the assumption that the main problem at ShopFlow was a lack of returning customers.
 
-Analiza klientów wskazała na problem aktywacji. Kolejnym pytaniem było sprawdzenie, czy firma jest przygotowana do obsługi popytu, szczególnie w przypadku produktów, które mogą wkrótce się wyczerpać.
+Among customers who had already made a first purchase, 90-day retention was **44%**, significantly above the assumed target.
 
-W analizie wykorzystano tabele inventory oraz products, łącząc je po polu product_id.
+The acquisition channel had some influence on the probability of a repeat purchase, but the differences were not large enough to classify one channel as entirely effective or ineffective.
 
-Z tabeli products pobrano:
+A much more important issue was that some registered customers never made their first purchase.
 
-- nazwę produktu;
-- kategorię;
-- status is_active.
+**Business recommendation:** The business objective should be reformulated. Instead of focusing only on increasing retention from **22%** to **30%**, management should also measure activation — the percentage of registered customers who complete their first purchase.
 
-Z tabeli inventory wykorzystano:
+Because Newsletter customers had the lowest retention and did not stand out in terms of LTV, the marketing team should also check whether the database of approximately **61,000 subscribers** is properly segmented.
 
-- stock_quantity, czyli bieżący stan magazynowy;
-- reorder_level, czyli poziom ponownego zamówienia;
-- lokalizację magazynową.
+Campaign performance could be compared by customer type, interaction history and time since registration.
 
-Za produkty zagrożone brakiem uznano produkty spełniające jednocześnie dwa warunki:
-```
+### 5. Which products are at risk of going out of stock?
+
+The customer analysis pointed to an activation problem. The next question was whether the company was prepared to handle demand, especially for products that could soon run out of stock.
+
+The analysis used the `inventory` and `products` tables, joined using `product_id`.
+
+The following fields were taken from the `products` table:
+
+- product name;
+- category;
+- `is_active` status.
+
+The following fields were used from the `inventory` table:
+
+- `stock_quantity`, meaning the current inventory level;
+- `reorder_level`, meaning the reorder threshold;
+- warehouse location.
+
+Products were classified as being at risk of going out of stock when both conditions were met:
+
+```text
 is_active = TRUE
 ```
-```
+
+```text
 stock_quantity ≤ reorder_level
 ```
-Dla każdego wybranego produktu obliczono 
+
+For each selected product, the potential shortage was calculated as:
+
+```text
+shortage = reorder_level − stock_quantity
 ```
-niedobór = reorder_level − stock_quantity
+
+![Lowest inventory levels](images/Najniższy_stan_magazynowy.png)
+
+The results were sorted by the lowest inventory level. The chart presents the 15 products with the lowest stock quantities.
+
+The analysis showed that **434 active products**, representing approximately **22% of the entire catalog**, were at or below their reorder threshold.
+
+More than **15 products** had zero stock, including “Organ Moda Eco”, “Dziadek Uroda Basic” and “Warzywo akcesoria”.
+
+**Result:** The problem does not concern only a few individual products. As many as **22% of the active catalog** required attention in terms of inventory replenishment.
+
+**Observation:** The scale of the risk was greater than suggested by the general statement that “some products are occasionally unavailable”.
+
+The result points to a systemic issue in the replenishment process. The `reorder_level` threshold exists in the data, but it does not appear to be automatically connected to operational actions.
+
+**Business recommendation:** ShopFlow should implement automated reorder alerts.
+
+The system should notify the purchasing team when a product reaches its reorder threshold. Priority should be given to products with zero stock and products with strong historical sales.
+
+This would make inventory replenishment data-driven rather than dependent on manual monitoring and reactive decisions after a product is already unavailable to customers.
+
+### 6. Which marketing channel generates customers with the highest LTV?
+
+The next step was to evaluate the quality of customers acquired through individual marketing channels.
+
+The number of new customers does not necessarily indicate that a channel is the most valuable. Therefore, the analysis was expanded to include LTV, or Customer Lifetime Value.
+
+LTV describes the total value of purchases generated by an average customer over the entire analyzed period.
+
+The analysis used the `customers` and `orders` tables. Each order was assigned the customer’s marketing channel from the `customers` table.
+
+For each channel, the following metrics were calculated:
+
+- total `total_amount`;
+- number of unique customers who placed at least one order;
+- average purchase value per buyer.
+
+LTV was calculated as:
+
+```text
+LTV =
+total total_amount generated by the channel
+/
+number of unique buyers in the channel
 ```
 
-![Najniższy stan magazynowy](images/Najniższy_stan_magazynowy.png)
-
-Wyniki posortowano według najniższego stanu magazynowego. Na wykresie przedstawiono 15 produktów o najniższym stanie.
-
-Analiza wykazała, że **434** aktywne produkty, czyli około **22%** całego katalogu, znajdowały się na poziomie progu zamówienia lub poniżej niego. Wśród nich było ponad **15** produktów z zerowym stanem magazynowym, między innymi „Organ Moda Eco”, „Dziadek Uroda Basic” oraz „Warzywo akcesoria”.
-
-**Wynik**: Problem nie dotyczy pojedynczych produktów. Aż **22%** aktywnego katalogu wymagało uwagi pod kątem uzupełnienia zapasów.
-
-**Obserwacja**: Skala zagrożenia jest większa, niż sugerowałaby ogólna informacja, że „części produktów czasami brakuje”. Wynik wskazuje na systemowy problem procesu uzupełniania zapasów. Sam próg reorder_level istnieje w danych, ale nie wynika z nich, że jest automatycznie wykorzystywany do uruchamiania działań.
-
-**Rekomendacja biznesowa**: Należy wdrożyć automatyczne alerty reorderowe. System powinien informować zespół zakupowy o produktach, których stan spadł do poziomu ponownego zamówienia.Priorytetowo należy potraktować produkty z zerowym stanem oraz produkty o wysokiej historycznej sprzedaży. Dzięki temu proces uzupełniania zapasów będzie oparty na danych, a nie na ręcznym monitoringu i reagowaniu dopiero wtedy, gdy klient nie może już kupić produktu.
-
-6. **Który kanał marketingowy generuje klientów o najwyższym LTV?** 
-
-Kolejnym krokiem było sprawdzenie jakości klientów pozyskiwanych przez poszczególne kanały marketingowe. Sama liczba nowych klientów nie musi oznaczać, że kanał jest najbardziej wartościowy. Dlatego analizę rozszerzono o LTV, czyli Customer Lifetime Value.
-
-LTV opisuje łączną wartość zakupów wygenerowaną przez przeciętnego klienta w całym analizowanym okresie.
-
-Wykorzystano dane z tabel customers oraz orders. Każdemu zamówieniu przypisano kanał marketingowy klienta z tabeli customers. Następnie dla każdego kanału obliczono:
-- sumę total_amount;
-- liczbę unikalnych klientów, którzy złożyli co najmniej jedno zamówienie;
-- średnią wartość zakupów przypadającą na jednego kupującego.
-
-LTV obliczono według wzoru:
-```
-LTV = suma total_amount w kanale / liczba unikalnych kupujących w kanale
-```
-Klienci bez żadnego zamówienia nie zostali uwzględnieni w obliczeniach, ponieważ nie wygenerowali jeszcze przychodu.
+Customers without any orders were excluded because they had not generated revenue.
 
 ![LTV](images/LTV.png)
 
-Wyniki pokazały, że różnice pomiędzy kanałami były niewielkie. LTV na klienta mieściło się w przedziale od **6 496 zł** do **6 990 zł**, a rozstęp wynosił około **7%**.
+The results showed that differences between channels were relatively small. LTV per customer ranged from **PLN 6,496** to **PLN 6,990**, with a spread of approximately **7%**.
 
-Najwyższe LTV osiągnęli klienci z kanału Organic — **6 990 zł**, a najniższe klienci pozyskani przez Influencer — **6 496 zł**. Meta Ads generował największą liczbę klientów, ale jego LTV znajdowało się w środku zestawienia, a nie na pierwszym miejscu.
+The highest LTV was recorded for Organic customers at **PLN 6,990**, while the lowest was recorded for Influencer customers at **PLN 6,496**.
 
-**Obserwacja**: Żaden kanał nie wyróżniał się zdecydowanie pod względem LTV. Meta Ads dostarczał dużego wolumenu klientów, ale nie generował klientów o najwyższej średniej wartości. Jest to szczególnie istotne, ponieważ kanał ten pochłaniał około **42%** wydatków marketingowych.
+Meta Ads generated the largest number of customers, but its LTV was in the middle of the ranking rather than at the top.
 
-**Rekomendacja biznesowa**: Decyzji o podziale budżetu nie należy opierać wyłącznie na liczbie pozyskanych klientów ani na samym LTV. Należy zestawić LTV z kosztem pozyskania klienta, czyli CAC. Dopiero porównanie wartości klienta z kosztem jego pozyskania pozwoli ocenić, które kanały są rzeczywiście najbardziej efektywne. Dane dotyczące kosztów kampanii nie znajdowały się w obecnym zbiorze ShopFlow. Jest to ważna luka analityczna, którą należy świadomie uzupełnić w kolejnym etapie.
+**Observation:** No channel clearly outperformed the others in terms of LTV.
 
-7.  **Ilu klientów robi zakupy tylko raz i nigdy nie wraca?** 
+Meta Ads delivered a high volume of customers, but it did not generate customers with the highest average value. This is particularly important because Meta Ads accounted for approximately **42% of marketing expenditure**.
 
-Analiza retencji pokazała, że klienci, którzy dokonali pierwszego zakupu, stosunkowo często wracają. Aby dokładniej zrozumieć sytuację, przeanalizowano całą bazę klientów i podzielono ją na trzy grupy:
-- klientów bez żadnego zrealizowanego zamówienia;
-- klientów z dokładnie jednym zrealizowanym zamówieniem;
-- klientów z co najmniej dwoma zrealizowanymi zamówieniami.
+**Business recommendation:** Budget allocation decisions should not be based exclusively on the number of acquired customers or on LTV alone.
 
-Tabelę customers połączono z tabelą orders po polu customer_id. Zamówienia ze statusem ""Cancelled"" zostały pominięte, ponieważ nie stanowiły faktycznie zrealizowanych zakupów.
+LTV should be compared with Customer Acquisition Cost, or CAC. Only by comparing customer value with acquisition cost will it be possible to identify the most efficient channels.
 
-Dla każdego klienta policzono liczbę zrealizowanych zamówień, a następnie przypisano go do odpowiedniego segmentu.
+Campaign cost data was not included in the current ShopFlow dataset. This is an important analytical gap that should be addressed in the next stage of the project.
 
-![Klienci z jednym zakupem](images/klienci_z_jednym_zakupem.png)
+### 7. How many customers make only one purchase and never return?
 
-Najważniejszy wynik dotyczył klientów, którzy jeszcze nie rozpoczęli zakupów. Aż **791** zarejestrowanych klientów, czyli **15,8%** całej bazy, nie miało żadnego zrealizowanego zamówienia. Jednocześnie spośród klientów, którzy dokonali pierwszego zakupu, aż **94,4%** wracało kiedykolwiek. Oznacza to, że popularne stwierdzenie „klienci nie wracają” nie opisuje właściwie problemu ShopFlow.
+The retention analysis showed that customers who made a first purchase often returned. To understand the situation more precisely, the entire customer base was divided into three groups:
 
-**Obserwacja**: Głównym problemem nie jest niska retencja klientów po pierwszym zakupie. Problemem jest to, że część zarejestrowanych klientów nigdy nie przechodzi od rejestracji do pierwszej transakcji. Dane zmieniły więc interpretację sytuacji biznesowej. Zarząd powinien rozdzielić dwa różne zjawiska:
-- aktywację klienta, czyli doprowadzenie do pierwszego zakupu;
-- retencję klienta, czyli zachęcenie go do kolejnych zakupów.
+- customers with no completed orders;
+- customers with exactly one completed order;
+- customers with at least two completed orders.
 
-**Rekomendacja biznesowa**: Priorytetem dla zespołu CRM powinna być kampania aktywacyjna skierowana do **791** klientów bez żadnego zrealizowanego zakupu. Można przetestować ograniczony czasowo rabat powitalny, przypomnienie o niedokończonej ścieżce zakupowej lub kampanię dopasowaną do kanału pozyskania. Sukces kampanii powinien być mierzony liczbą klientów, którzy dokonali pierwszego zakupu, a nie samą liczbą wysłanych wiadomości.
+The `customers` table was joined with the `orders` table using `customer_id`.
 
-8. **Czy członkowie programu lojalnościowego kupują częściej i 
-więcej?**
+Orders with the `Cancelled` status were excluded because they did not represent completed purchases.
 
-ShopFlow Club działał już od ośmiu miesięcy. Naturalnym pytaniem było więc sprawdzenie, czy członkowie programu lojalnościowego kupują częściej i generują większą wartość niż pozostali klienci.
+![Customers with one purchase](images/klienci_z_jednym_zakupem.png)
 
-Klientów podzielono na dwie grupy:
-loyalty_member = **TRUE** — członkowie programu,
-loyalty_member = **FALSE** — pozostali klienci.
-Dla każdej grupy obliczono:
-- liczbę klientów;
-- liczbę zamówień;
-- średnią liczbę zamówień na klienta;
-- średnią wartość koszyka;
-- średni łączny przychód przypadający na klienta.
+The most important finding concerned customers who had not started purchasing at all.
 
+As many as **791 registered customers**, representing **15.8% of the entire customer base**, had no completed orders.
 
-![Lojalność klientów](images/Lojalność_klientów.png)
+At the same time, **94.4% of customers who made a first purchase returned at some point**.
 
-Wyniki nie pokazały wyraźnej przewagi członków programu. Członkowie ShopFlow Club mieli średnio **3,97** zamówienia na klienta, średni koszyk na poziomie **1 420 zł** oraz średni przychód na klienta wynoszący **5 640 zł**.
+This means that the common statement “customers do not come back” does not accurately describe ShopFlow’s main problem.
 
-Dla klientów niebędących członkami programu wartości wynosiły odpowiednio **3,99** zamówienia, **1 431 zł** średniego koszyka oraz **5 712 zł** średniego przychodu na klienta.
+**Observation:** The main issue is not low retention after the first purchase. The problem is that some registered customers never move from registration to their first transaction.
 
-**Obserwacja**: Na podstawie dostępnych danych członkowie programu lojalnościowego nie kupują częściej ani więcej niż pozostali klienci. Różnice są niewielkie, ale wszystkie trzy analizowane metryki są nawet nieznacznie niższe w grupie członków programu. Nie oznacza to jeszcze definitywnie, że program nie działa. Możliwe, że część klientów dołączyła do niego niedawno i nie miała wystarczająco dużo czasu, aby wygenerować mierzalny efekt.
+Management should therefore distinguish between two separate concepts:
 
-**Rekomendacja biznesowa**: Przed dalszym inwestowaniem w rozwój ShopFlow Club należy przeprowadzić dodatkową analizę ograniczoną do klientów, którzy są członkami programu od co najmniej trzech miesięcy. Jeśli również w tej grupie nie pojawi się wyraźna różnica, warto zrewidować mechanikę programu. Należy sprawdzić, czy oferowane korzyści są dla klientów wystarczająco atrakcyjne i czy program rzeczywiście zachęca do częstszych zakupów, a nie tylko rejestruje kolejnych uczestników.
+- customer activation, meaning encouraging a customer to make a first purchase;
+- customer retention, meaning encouraging a customer to make subsequent purchases.
 
-9.  **Które produkty mają najdłuższy czas "zalegania" na magazynie?** 
-    
-Analiza zapasów pokazała, że część produktów może być zagrożona brakiem. Równocześnie należało sprawdzić, czy druga część problemu nie polega na utrzymywaniu zbyt wysokich zapasów produktów, które sprzedają się wolno. W tym przypadku przeanalizowano dane z tabel inventory, products oraz order_items. Wybrano produkty, dla których stan magazynowy przekraczał 500 sztuk. Następnie zestawiono ich aktualny stan z łączną liczbą sprzedanych sztuk.
+**Business recommendation:** The CRM team should prioritize an activation campaign targeting the **791 customers without any completed purchase**.
 
-![Zaleganie na magazynie](images/zaleganie_na_magazywnie.png)
+Possible actions include a time-limited welcome discount, a reminder about an incomplete shopping journey or a campaign tailored to the customer’s acquisition channel.
 
-Analiza wykazała, że **830** produktów, czyli ponad **40%** katalogu, miało stan magazynowy powyżej **500** sztuk. Wśród produktów o największym stanie magazynowym znalazły się między innymi:
-- „Dziewięć Moda Premium” — **1 999** sztuk w magazynie, tylko **27** sprzedanych sztuk;
-- „Szwedzki Moda Pro” — **1 997** sztuk w magazynie, tylko **34** sprzedane sztuki.
+Campaign success should be measured by the number of customers who complete their first purchase, rather than by the number of messages sent.
 
-**Wynik**: Znaczna część katalogu ma stan magazynowy nieproporcjonalny do rzeczywistej sprzedaży.
+### 8. Do loyalty program members purchase more frequently and spend more?
 
-**Obserwacja**: ShopFlow ma jednocześnie dwa problemy: część produktów jest zagrożona brakiem, a część innych produktów zalega w magazynie w nadmiernych ilościach. Skala nadmiaru jest większa, niż sugerowałaby ogólna obserwacja, że „niektóre produkty zalegają miesiącami”. Problem dotyczy ponad 40% katalogu, dlatego nie można go traktować jako zbioru pojedynczych, nietrafionych decyzji zakupowych. Taka sytuacja może wskazywać na problem z prognozowaniem popytu, brak regularnej analizy rotacji lub niewystarczające powiązanie decyzji zakupowych z historyczną sprzedażą.
+ShopFlow Club had been operating for eight months. The next natural question was whether loyalty program members purchased more frequently and generated more value than other customers.
 
-**Rekomendacja biznesowa**: Należy wprowadzić regularny raport rotacji zapasów oparty na relacji aktualnego stanu magazynowego do sprzedaży w określonym czasie. Produkty o najniższej rotacji powinny być automatycznie oznaczane do dalszej decyzji: wyprzedaży, ograniczenia kolejnych dostaw, przeniesienia do innego kanału sprzedaży albo wycofania z oferty. Jednocześnie raport powinien być analizowany razem z raportem produktów zagrożonych brakiem. Dopiero połączenie obu perspektyw pokaże pełny obraz zarządzania zapasami: gdzie sklep traci sprzedaż przez niedobór, a gdzie zamraża kapitał w produktach o zbyt niskiej rotacji.
+Customers were divided into two groups:
 
-## 💡Podsumowanie
-Analiza danych sklepu internetowego ShopFlow pozwoliła zweryfikować kluczowe założenia biznesowe oraz wskazać obszary wymagające dalszej optymalizacji. Przed rozpoczęciem analizy przeprowadzono kompleksowe oczyszczenie i ujednolicenie danych, dzięki czemu wszystkie wnioski zostały oparte na spójnym i wiarygodnym zbiorze informacji.
+```text
+loyalty_member = TRUE
+```
 
-Najważniejsze wnioski z analizy wskazują, że:
+meaning loyalty program members, and:
 
-1. Problem ShopFlow nie dotyczy retencji, lecz aktywacji klientów.
- Analiza wykazała, że 94,4% klientów dokonujących pierwszego zakupu wraca po kolejne zamówienia, natomiast 15,8% zarejestrowanych użytkowników nigdy nie dokonuje zakupu. Sugeruje to, że działania biznesowe powinny koncentrować się na zwiększaniu aktywacji nowych klientów, a nie na poprawie retencji.
+```text
+loyalty_member = FALSE
+```
 
-2. Elektronika jest strategiczną, ale wymagającą kategorią.
- Kategoria generuje najwyższy przychód, jednak jednocześnie osiąga najniższą marżę oraz najwyższy udział zwrotów. Wskazuje to na potrzebę odrębnej strategii obejmującej politykę cenową, promocje, dobór asortymentu oraz kontrolę jakości produktów.
+meaning customers who were not members.
 
-3. Program lojalnościowy nie wykazuje obecnie mierzalnego wpływu na zachowania klientów.
- Po ośmiu miesiącach funkcjonowania uczestnicy programu nie osiągają lepszych wyników pod względem częstotliwości zakupów ani wartości klienta. Przed dalszymi inwestycjami warto przeprowadzić szczegółową ocenę skuteczności programu i zweryfikować jego założenia.
+For each group, the following metrics were calculated:
 
-4. Zarządzanie zapasami wymaga optymalizacji procesu prognozowania popytu.
- Analiza wykazała, że 22% produktów jest zagrożonych brakiem w magazynie, podczas gdy 40% katalogu wykazuje nadmierne stany magazynowe. Współwystępowanie niedoborów i nadwyżek sugeruje problem systemowy związany z planowaniem zakupów i uzupełnianiem zapasów.
+- number of customers;
+- number of orders;
+- average number of orders per customer;
+- average order value;
+- average total revenue per customer.
 
-5. Ocena kanałów marketingowych powinna uwzględniać jakość pozyskiwanych klientów.
- Choć Meta Ads odpowiada za największy wolumen nowych klientów, generowany przez ten kanał poziom LTV nie jest najwyższy. Oznacza to, że decyzje budżetowe powinny opierać się nie tylko na liczbie pozyskanych klientów, lecz również na ich długoterminowej wartości dla firmy.
+![Customer loyalty](images/Lojalność_klientów.png)
 
+The results did not show a clear advantage for loyalty program members.
+
+ShopFlow Club members placed an average of **3.97 orders per customer**, had an average order value of **PLN 1,420** and generated average revenue of **PLN 5,640 per customer**.
+
+For non-members, the corresponding figures were **3.99 orders**, **PLN 1,431 average order value** and **PLN 5,712 average revenue per customer**.
+
+**Observation:** Based on the available data, loyalty program members did not purchase more frequently or spend more than non-members.
+
+The differences were small, but all three analyzed metrics were slightly lower for loyalty program members.
+
+This does not necessarily prove that the program is ineffective. Some customers may have joined recently and may not yet have had enough time to generate a measurable effect.
+
+**Business recommendation:** Before making further investments in ShopFlow Club, the analysis should be repeated for customers who have been members for at least three months.
+
+If there is still no meaningful difference in this group, the program mechanics should be reviewed.
+
+The company should check whether the benefits are attractive enough and whether the program genuinely encourages more frequent purchases rather than simply registering additional participants.
+
+### 9. Which products have the longest inventory holding time?
+
+The inventory analysis showed that some products may be at risk of going out of stock. At the same time, it was necessary to investigate whether the other side of the problem was excessive inventory of products that sell slowly.
+
+The analysis used data from the `inventory`, `products` and `order_items` tables.
+
+Products with stock levels above 500 units were selected. Their current inventory was then compared with the total number of units sold.
+
+![Excess inventory](images/zaleganie_na_magazywnie.png)
+
+The analysis showed that **830 products**, representing more than **40% of the catalog**, had inventory levels above 500 units.
+
+Examples of products with very high inventory levels included:
+
+- “Dziewięć Moda Premium” — **1,999 units in stock**, only **27 units sold**;
+- “Szwedzki Moda Pro” — **1,997 units in stock**, only **34 units sold**.
+
+**Result:** A significant part of the catalog has inventory levels that are disproportionate to actual sales.
+
+**Observation:** ShopFlow faces two simultaneous inventory problems. Some products are at risk of going out of stock, while other products remain in inventory in excessive quantities.
+
+The scale of excess inventory is greater than suggested by the general observation that “some products remain unsold for months”. The problem affects more than 40% of the catalog and therefore cannot be treated as a collection of isolated purchasing mistakes.
+
+This situation may indicate problems with demand forecasting, a lack of regular inventory turnover analysis or insufficient integration between purchasing decisions and historical sales data.
+
+**Business recommendation:** ShopFlow should introduce a regular inventory turnover report based on the relationship between current stock and sales over a defined period.
+
+Products with the lowest turnover should be automatically flagged for further action, such as discounting, limiting future deliveries, moving them to another sales channel or withdrawing them from the offer.
+
+At the same time, the inventory turnover report should be analyzed together with the out-of-stock risk report.
+
+Only by combining both perspectives can the company understand the full inventory situation: where sales are lost because of insufficient stock and where capital is tied up in products with low turnover.
+
+## 💡 Summary
+
+The ShopFlow analysis helped verify key business assumptions and identify areas requiring further optimization.
+
+Before the analysis began, the data was comprehensively cleaned and standardized. As a result, the conclusions were based on a consistent and reliable dataset.
+
+The most important findings are:
+
+1. **ShopFlow’s main problem is activation, not retention.**
+
+   The analysis showed that **94.4% of customers who made a first purchase returned for another order**, while **15.8% of registered users never made a purchase**.
+
+   This suggests that business activities should focus on increasing new customer activation rather than primarily improving retention.
+
+2. **Electronics is a strategic but challenging category.**
+
+   Electronics generates the highest revenue, but also has the lowest margin and the highest return rate.
+
+   This indicates the need for a separate strategy covering pricing, promotions, product assortment and product quality control.
+
+3. **The loyalty program currently shows no measurable impact on customer behavior.**
+
+   After eight months of operation, program members do not outperform other customers in terms of purchase frequency or customer value.
+
+   Before making further investments, the company should carry out a detailed evaluation of the program and review its underlying assumptions.
+
+4. **Inventory management and demand forecasting require improvement.**
+
+   The analysis showed that **22% of products are at risk of going out of stock**, while **40% of the catalog has excessive inventory levels**.
+
+   The simultaneous occurrence of shortages and surpluses suggests a systemic problem with purchasing planning and inventory replenishment.
+
+5. **Marketing channel evaluation should consider customer quality.**
+
+   Although Meta Ads generates the highest volume of new customers, the LTV of customers acquired through this channel is not the highest.
+
+   This means that budget allocation decisions should be based not only on the number of acquired customers, but also on their long-term value to the company.
