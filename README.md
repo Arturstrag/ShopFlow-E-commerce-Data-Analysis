@@ -15,7 +15,6 @@ The project included:
 
 ## 📚 Table of Contents
 
-  - [📚 Table of Contents](#-table-of-contents)
   - [🗂️ Data](#️-data)
     - [Main Data Areas](#main-data-areas)
   - [🧹 Data Preparation](#-data-preparation)
