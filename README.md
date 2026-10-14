@@ -72,7 +72,7 @@ The data preparation process included:
 
 As a result, a consistent and structured dataset was prepared for further analysis.
 
-The data-cleaning process was performed using **PostgreSQL** and **SQL** and is available in a separate project:
+The data-cleaning process was performed using **PostgreSQL** and **DBeaver** and is available in a separate project:
 
 [ShopFlow E-commerce Data Cleaning Project](https://github.com/Arturstrag/ShopFlow-E-commerce-Data-Cleaning-Project)
 
@@ -80,6 +80,7 @@ The data-cleaning process was performed using **PostgreSQL** and **SQL** and is 
 
 - **Microsoft Excel** – data analysis and presentation of results;
 - **Copilot** – support in creating and optimizing queries.
+- **SQL (PostgresSQL)** - data cleaning, validation for analysis
 
 ## Business Context
 
