@@ -18,7 +18,7 @@ The project included:
   - [🗂️ Data](#️-data)
     - [Main Data Areas](#main-data-areas)
   - [🧹 Data Preparation](#-data-preparation)
-  - [🔧 Tools and Technologies](#-tools-and-technologies)
+  - [🔧 Tools and Analytical Methods](#-tools-and-Analytical-Methods)
   - [Business Context](#business-context)
   - [🚨 Main Business Challenges](#-main-business-challenges)
   - [🧹 Business Analysis](#-business-analysis)
@@ -76,11 +76,15 @@ The data-cleaning process was performed using **PostgreSQL** and **DBeaver** and
 
 [ShopFlow E-commerce Data Cleaning Project](https://github.com/Arturstrag/ShopFlow-E-commerce-Data-Cleaning-Project)
 
-## 🔧 Tools and Technologies
+## 🔧 Tools and Analytical Methods
 
-- **Microsoft Excel** – data analysis and presentation of results;
-- **Copilot** – support in creating and optimizing queries.
-- **SQL (PostgresSQL)** - data cleaning, validation for analysis
+- **Microsoft Excel** – data analysis, calculations, data visualization, and dashboard development.
+- **Pivot Tables** – summarizing and aggregating sales, customer, and product data to identify patterns and compare performance across categories.
+- **Conditional Formatting** – highlighting important values, identifying low-margin products, and detecting potential inventory risks.
+- **Charts and Dashboard** – presenting key performance indicators and business trends in a clear, accessible format.
+- **SQL (PostgreSQL)** – data cleaning, validation, and preparation for analysis.
+- **DBeaver** – database management and SQL query execution.
+- **Microsoft Copilot** – support in creating and optimizing queries.
 
 ## Business Context
 
@@ -441,3 +445,24 @@ The main findings are:
 5. **Marketing channel evaluation should consider customer quality.**
 
    Although Meta Ads generates the highest volume of new customers, the LTV of customers acquired through this channel is not the highest. Budget allocation decisions should therefore consider both acquisition volume and long-term customer value.
+
+To provide a consolidated overview of the company's performance, an interactive management dashboard was developed in Microsoft Excel.
+
+The dashboard presents key performance indicators, including total revenue, customer activation, product margins, inventory risks, and excess inventory.
+
+It also includes visualizations of monthly revenue trends and revenue and average margins by product category.
+
+![Raport](images/raport.png)
+
+The dashboard allows management to quickly identify areas requiring attention and supports data-driven business decisions.  
+
+## 🚀 Business Development Opportunities
+
+Based on the analytical findings, several potential directions for ShopFlow's development were identified.
+
+These opportunities focus on five strategic areas:
+- Customer Activation: Improve conversion from registration to first purchase through targeted welcome campaigns and customer segmentation.
+- Profitability Optimization: Review low-margin electronics products, renegotiate supplier prices, and test accessory cross-selling.
+- Inventory Optimization: Introduce automated replenishment alerts, identify slow-moving inventory, and improve demand forecasting.
+- Marketing Effectiveness: Combine customer LTV with acquisition costs to improve marketing budget allocation.
+- Customer Loyalty: Evaluate ShopFlow Club effectiveness and redesign program incentives if necessary.
